@@ -23,7 +23,7 @@ config MACH_RK3188_SDK
 	bool "RK3188 sdk Board"
 
 config MACH_RK3188_EPD
-	  bool " RK3188 epd Board" 
+	  bool "RK3188 epd Board" 
 	  
 config MACH_RK3188_FPGA
 	bool "RK3188 FPGA board"
