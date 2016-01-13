@@ -1,0 +1,10 @@
+obj-$(CONFIG_HARDWARE_EBC)   += hardware_ebc.o
+obj-$(CONFIG_HARDWARE_EBC) += hardware_epd_public.o
+obj-$(CONFIG_SOFTWARE_EBC)   += software_ebc.o
+obj-$(CONFIG_SOFTWARE_EBC) += software_epd_public.o
+obj-$(CONFIG_EBC)   += epdlut/
+obj-$(CONFIG_EBC)   += check_auto_image_sARM.o
+obj-$(CONFIG_EBC) += bufmanage/
+obj-$(CONFIG_EBC) += bootani/
+obj-$(CONFIG_EBC) += ebc_dbg/
+obj-$(CONFIG_EBC) += epdpower/
