@@ -1,0 +1,3 @@
+[submodule "fs/exfat"]
+	path = fs/exfat
+	url = git@github.com:rychly/exfat-nofuse.git
