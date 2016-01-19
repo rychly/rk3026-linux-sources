@@ -1741,19 +1741,6 @@ static inline void set_nlink(struct inode *inode, unsigned int nlink)
 }
 
 /**
- * set_nlink - directly set an inode's link count
- * @inode: inode
- * @nlink: new nlink (should be non-zero)
- *
- * This is a low-level filesystem helper to replace any
- * direct filesystem manipulation of i_nlink.
- */
-static inline void set_nlink(struct inode *inode, unsigned int nlink)
-{
-	inode->i_nlink = nlink;
-}
-
-/**
  * inc_nlink - directly increment an inode's link count
  * @inode: inode
  *
@@ -2233,11 +2220,6 @@ extern int generic_permission(struct inode *, int, unsigned int,
 static inline bool execute_ok(struct inode *inode)
 {
 	return (inode->i_mode & S_IXUGO) || S_ISDIR(inode->i_mode);
-}
-
-static inline struct inode *file_inode(struct file *f)
-{
-	return f->f_path.dentry->d_inode;
 }
 
 static inline struct inode *file_inode(struct file *f)
