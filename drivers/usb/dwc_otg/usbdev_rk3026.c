@@ -435,7 +435,7 @@ arch_initcall(usbdev_init_devices);
 static struct wake_lock usb_wakelock;
 static struct delayed_work usb_det_wakeup_work;
 
-inline void do_wakeup(void)
+static inline void do_wakeup(void)
 {
     wake_lock_timeout(&usb_wakelock, WAKE_LOCK_TIMEOUT);
 	rk28_send_wakeup_key();

@@ -81,7 +81,12 @@ int32_t dwc_otg_handle_mode_mismatch_intr (dwc_otg_core_if_t *_core_if)
  *
  * @param _core_if Programming view of DWC_otg controller.
  */
-/*static*/ inline void hcd_start( dwc_otg_core_if_t *_core_if ) 
+#if __GNUC__ > 4
+extern
+#else
+/*static*/
+#endif
+inline void hcd_start( dwc_otg_core_if_t *_core_if ) 
 {        
         if (_core_if->hcd_cb && _core_if->hcd_cb->start) {
                 _core_if->hcd_cb->start( _core_if->hcd_cb->p );
@@ -354,8 +359,8 @@ int32_t dwc_otg_handle_conn_id_status_change_intr(dwc_otg_core_if_t *_core_if)
 	
     /*
     * yangkai@rk, 20100331
-    * 充电器接入时有可能USB ID为低, 此时应特别处理，不切换成HOST；
-	* 注意,如果host设备如果快速拔插，会当成USB_ID为低的充电器处理
+    * When the charger is possible to access USB ID is low, this time should be special treatment, do not switch to HOST;
+    * Note that if the host device if the quick-disconnect, as will USB_ID low processing charger
     */
     gotgctl.d32 = dwc_read_reg32( &_core_if->core_global_regs->gotgctl );
 	#if 0
@@ -368,7 +373,7 @@ int32_t dwc_otg_handle_conn_id_status_change_intr(dwc_otg_core_if_t *_core_if)
     	return 1;
     }
     #endif
-// cmy: 只有当usb处于正常模式时，才处理该中断进行切换
+// cmy: only when the usb is in normal mode, it processes the interrupt switch
     if(_core_if->usb_mode != USB_MODE_NORMAL)
     {
         DWC_PRINT("_core_if->usb_mode=%d\n", _core_if->usb_mode);
