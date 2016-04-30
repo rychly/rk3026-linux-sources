@@ -1,0 +1,42 @@
+# http://doc.gitlab.com/ce/ci/yaml/README.html
+# https://hub.docker.com/_/gcc/
+# http://releases.linaro.org/components/toolchain/binaries/
+
+image: gcc:latest
+
+variables:
+  PUBLIC: "public"
+
+.toolchain: &toolchain
+  variables:
+    LINAROVER: "5.3-2016.02"
+    TCDIR: "${CI_PROJECT_DIR}/../gcc-linaro-${LINAROVER}-x86_64_arm-linux-gnueabi/bin"
+    TCPRF: "arm-linux-gnueabi-"
+    TCARCH: "arm"
+  before_script:
+    - test -e .gitmodules && sed -i 's|\(\s\)git@\([^:]*\):\(.*\.git\)$|\1https://\2/\3|g' .gitmodules
+    - git submodule init
+    - git submodule update --recursive
+    - apt-get --quiet update --yes
+    - apt-get --quiet install --yes sharutils lzop lib32stdc++6
+    - wget --quiet --output-document=- "http://releases.linaro.org/components/toolchain/binaries/${LINAROVER}/arm-linux-gnueabi/gcc-linaro-${LINAROVER}-x86_64_arm-linux-gnueabi.tar.xz" | tar --extract --xz -C .. && echo "Linaro ${LINAROVER} downloaded and extracted"
+    - NUMCPUS=$(grep -c '^processor\s' /proc/cpuinfo)
+    - export PATH="${PATH}:${TCDIR}"
+
+stages:
+  - build
+
+pages:
+  stage: build
+  only:
+    - master
+  <<: *toolchain
+  script:
+    - make rk3026_t62d_defconfig
+    - make ARCH="${TCARCH}" CROSS_COMPILE="${TCPRF}" "--jobs=${NUMCPUS}" "--load-average=${NUMCPUS}" Image zImage
+    - mkdir -p "${PUBLIC}"
+    - ./mkkrnlimg arch/arm/boot/Image "${PUBLIC}/kernel.img"
+    - ./mkkrnlimg arch/arm/boot/zImage "${PUBLIC}/zkernel.img"
+  artifacts:
+    paths:
+      - ${PUBLIC}

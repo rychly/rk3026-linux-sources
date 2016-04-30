@@ -1,5 +1,3 @@
-/kernel.img
-
 #
 # NOTE! Don't add files that are generated in specific
 # subdirectories here. Add them in the ".gitignore" file
@@ -48,12 +46,14 @@ Untitled Project.*
 /Module.markers
 /Module.symvers
 /kernel.img
+/zkernel.img
 
 #
 # git files that we don't want to ignore even it they are dot-files
 #
 !.gitignore
 !.mailmap
+!.gitlab-ci.yml
 
 #
 # Generated include files
